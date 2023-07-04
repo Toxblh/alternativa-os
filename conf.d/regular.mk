@@ -177,7 +177,7 @@ distro/regular-xfce-install: distro/.regular-install-x11-systemd \
 
 distro/regular-xfce-sysv: distro/.regular-gtk-sysv mixin/regular-xfce-sysv; @:
 
-distro/regular-gnome3-install: distro/.regular-install-x11-systemd mixin/regular-gnome3 \
+distro/regular-gnome-install: distro/.regular-install-x11-systemd mixin/regular-gnome \
 	use/kernel/latest +plymouth; @:
 
 distro/regular-xfce-sysv-install: distro/.regular-install-x11-full \
@@ -192,10 +192,8 @@ distro/regular-enlightenment: distro/.regular-gtk use/x11/enlightenment; @:
 distro/regular-cinnamon: distro/.regular-gtk mixin/regular-cinnamon; @:
 
 # not .regular-gtk due to gdm vs lightdm
-distro/regular-gnome3: distro/.regular-desktop mixin/regular-gnome3 \
-	use/kernel/latest +plymouth use/browser/epiphany
-	@$(call add,LIVE_PACKAGES,livecd-gnome3-setup-done)
-	@$(call add,LIVE_PACKAGES,screenpen)
+distro/regular-gnome: distro/.regular-desktop mixin/regular-gnome \
+	use/kernel/latest +plymouth use/browser/epiphany; @:
 
 distro/regular-lxqt: distro/.regular-gtk mixin/regular-lxqt +plymouth
 	@$(call add,THE_LISTS,$(call tags,lxqt desktop))
@@ -233,7 +231,6 @@ distro/.regular-server: distro/.regular-server-base use/net/etcnet \
 	use/server/mini use/firmware/qlogic use/rescue/base \
 	use/ntp/chrony use/cleanup/libs use/bootloader/grub +efi
 	@$(call add,RESCUE_LISTS,$(call tags,rescue misc))
-	@$(call add,BASE_PACKAGES,aptitude)
 	@$(call add,CLEANUP_PACKAGES,qt4-common qt5-base-common)
 	@$(call add,DEFAULT_SERVICES_DISABLE,bridge)
 	@$(call add,DEFAULT_SERVICES_ENABLE,getty@tty1)

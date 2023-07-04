@@ -91,11 +91,10 @@ mixin/regular-cinnamon: use/x11/cinnamon use/x11/lightdm/slick +nm-gtk \
 
 mixin/regular-deepin: use/x11/deepin use/browser/chromium +nm; @:
 
-mixin/regular-gnome3: use/x11/gnome3 use/fonts/ttf/redhat +nm-gtk
-	@$(call add,THE_PACKAGES,xcalib templates)
+mixin/regular-gnome: use/x11/gnome use/fonts/ttf/redhat +nm
+	@$(call add,THE_PACKAGES,templates)
 	@$(call add,THE_PACKAGES,chrome-gnome-shell)
 	@$(call add,THE_PACKAGES,qt5-wayland qt6-wayland)
-	@$(call add,THE_PACKAGES,packagekit)
 
 mixin/regular-kde5: use/x11/kde5 use/browser/falkon \
 	use/x11/kde5-display-manager-lightdm \
@@ -153,7 +152,7 @@ mixin/regular-rescue: use/rescue use/isohybrid use/luks use/branding \
 mixin/regular-builder: use/dev/builder/base use/net/dhcp use/ntp/chrony
 	@$(call add,THE_PACKAGES,bash-completion elinks gpm lftp openssh)
 	@$(call add,THE_PACKAGES,rpm-utils screen tmux wget zsh)
-	@$(call add,THE_PACKAGES,apt-repo aptitude eepm)
+	@$(call add,THE_PACKAGES,apt-repo)
 
 ### vm.mk
 mixin/cloud-init:
