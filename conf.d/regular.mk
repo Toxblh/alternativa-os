@@ -10,6 +10,7 @@ distro/.regular-bare: distro/.base use/kernel/net use/docs/license \
 	@$(call try,SAVE_PROFILE,yes)
 	@$(call add,STAGE1_PACKAGES,firmware-linux)
 	@$(call add,STAGE1_KMODULES,drm)
+	@$(call set,BOOTVGA,)
 ifeq (sisyphus,$(BRANCH))
 ifeq (,$(filter-out i586 x86_64,$(ARCH)))
 	@$(call set,BOOTLOADER,grubpcboot)
@@ -34,7 +35,6 @@ distro/.regular-x11: distro/.regular-base mixin/regular-x11 \
 # Network install
 distro/regular-net-install: distro/grub-net-install; @:
 ifeq (sisyphus,$(BRANCH))
-	@$(call set,BOOTCHAIN_OEM_SRV_NETINST,nightly.altlinux.org)
 ifeq (,$(filter-out i586 x86_64,$(ARCH)))
 	@$(call set,BOOTCHAIN_OEM_URL_NETINST,/sisyphus/snapshots/$(DATE)/regular-NAME-$(DATE)-$(ARCH).iso)
 else
@@ -44,7 +44,7 @@ endif
 
 # WM base target
 distro/.regular-wm: distro/.regular-x11 \
-	mixin/regular-desktop +vmguest \
+	mixin/regular-desktop \
 	use/live/rw +live-installer
 	@$(call set,INSTALLER,alt-workstation)
 	@$(call set,GRUB_DEFAULT,live)
@@ -53,7 +53,7 @@ distro/.regular-wm: distro/.regular-x11 \
 # DE base target
 # TODO: use/plymouth/live when luks+plymouth is done, see also #28255
 distro/.regular-desktop: distro/.regular-wm use/branding/full \
-	use/firmware/laptop +systemd +systemd-optimal
+	use/firmware/laptop +systemd +systemd-optimal +vmguest
 	@$(call add,THE_PACKAGES,bluez)
 	@$(call add,DEFAULT_SERVICES_ENABLE,bluetoothd)
 
@@ -80,7 +80,6 @@ distro/.regular-jeos-base: distro/.regular-bare \
 	use/isohybrid use/branding \
 	use/install2/repo use/install2/packages \
 	use/net/etcnet
-	@$(call set,BOOTVGA,)
 	@$(call set,INSTALLER,altlinux-generic)
 	@$(call add,INSTALL2_BRANDING,alterator notes)
 	@$(call add,THE_BRANDING,alterator) # just to be cleaned up later on
@@ -95,10 +94,7 @@ distro/.regular-jeos: distro/.regular-jeos-base \
 
 distro/.regular-jeos-full: distro/.regular-jeos use/install2/vmguest \
 	use/volumes/jeos use/ntp/chrony use/bootloader/grub \
-	use/grub/localboot_bios.cfg +efi
-ifeq (sisyphus,$(BRANCH))
-	@$(call set,KFLAVOURS,un-def)
-endif
+	use/grub/localboot_bios.cfg use/kernel/latest +efi
 	@$(call add,BASE_PACKAGES,nfs-utils gdisk)
 	@$(call add,INSTALL2_PACKAGES,fdisk)
 	@$(call add,INSTALL2_PACKAGES,btrfs-progs)
@@ -195,8 +191,7 @@ distro/regular-cinnamon: distro/.regular-gtk mixin/regular-cinnamon; @:
 distro/regular-gnome: distro/.regular-desktop mixin/regular-gnome \
 	use/kernel/latest +plymouth use/browser/epiphany; @:
 
-distro/regular-lxqt: distro/.regular-gtk mixin/regular-lxqt +plymouth
-	@$(call add,THE_LISTS,$(call tags,lxqt desktop))
+distro/regular-lxqt: distro/.regular-gtk mixin/regular-lxqt +plymouth; @:
 
 distro/regular-deepin: distro/.regular-gtk mixin/regular-deepin; @:
 

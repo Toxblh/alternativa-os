@@ -1,8 +1,10 @@
-mixin/waydroid:
+mixin/waydroid: ; @:
+ifeq (,$(filter-out aarch64 x86_64,$(ARCH)))
 	@$(call add,THE_PACKAGES,libgbinder1 waydroid)
 	@$(call add,THE_KMODULES,anbox)
 	@$(call add,DEFAULT_SYSTEMD_SERVICES_ENABLE,waydroid-container.service)
 	@$(call add,BASE_BOOTARGS,psi=1)
+endif
 
 mixin/phone-base: use/ntp/chrony use/repo use/branding/notes \
 	use/deflogin/privileges use/deflogin/xgrp use/deflogin/hardware \
@@ -14,13 +16,15 @@ mixin/phone-base: use/ntp/chrony use/repo use/branding/notes \
 	@$(call add,CONTROL,fusermount:public)
 	@$(call add,CONTROL,libnss-role:disabled)
 
-mixin/phosh: use/x11/gdm use/x11-autologin +pulse +nm +nm-native \
-	use/services
-	@$(call add,THE_PACKAGES,phosh mutter-gnome xorg-xwayland)
+mixin/phosh: use/services +pulse +nm +nm-native
+	@$(call add,THE_PACKAGES,phosh xdg-desktop-portal-gtk)
+	@$(call add,THE_PACKAGES,gnome-control-center xorg-xwayland)
 	@$(call add,THE_PACKAGES,gnome-terminal gedit)
 	@$(call add,THE_PACKAGES,qt5-wayland qt6-wayland)
 	@$(call add,THE_PACKAGES,bluez)
+	@$(call add,THE_PACKAGES,tracker3 nautilus)
 	@$(call add,THE_LISTS,mobile/apps)
+	@$(call add,DEFAULT_SERVICES_ENABLE,phosh)
 	@$(call add,DEFAULT_SERVICES_ENABLE,bluetoothd)
 	@$(call set,DEFAULT_SESSION,phosh)
 
@@ -28,8 +32,13 @@ ifeq (vm,$(IMAGE_CLASS))
 vm/.phosh: vm/systemd mixin/phone-base mixin/phosh +systemd \
 	mixin/waydroid; @:
 
-vm/phosh: vm/.phosh use/tty/S0 use/efi/grub use/bootloader/uboot \
-	use/firmware +x11 +plymouth +vmguest; @:
+vm/phosh: vm/.phosh use/tty/S0 use/efi/grub use/uboot use/phone \
+	use/firmware +x11 +plymouth +vmguest
+	@$(call set,KFLAVOURS,un-def)
+ifeq (aarch64,$(ARCH))
+	@$(call set,VM_PARTTABLE,msdos)
+	@$(call set,VM_BOOTTYPE,EFI)
+endif
 endif
 
 ifeq (aarch64,$(ARCH))
@@ -43,6 +52,6 @@ mixin/pinephone: use/x11/armsoc use/firmware use/bootloader/uboot use/tty/S2 \
 	@$(call add,DEFAULT_SYSTEMD_SERVICES_ENABLE,eg25-manager.service)
 
 ifeq (vm,$(IMAGE_CLASS))
-vm/pinephone-phosh: vm/.phosh mixin/pinephone; @:
+vm/pinephone-phosh: vm/.phosh mixin/pinephone +plymouth; @:
 endif
 endif

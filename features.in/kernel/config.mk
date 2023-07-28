@@ -6,7 +6,11 @@ else
 ifeq (,$(filter-out riscv64,$(ARCH)))
 	@$(call try,KFLAVOURS,un-def)
 else
+ifeq (,$(filter-out loongarch64,$(ARCH)))
+	@$(call try,KFLAVOURS,loongarch)
+else
 	@$(call try,KFLAVOURS,std-def)
+endif
 endif
 endif
 	@$(call xport,KFLAVOURS)
@@ -44,6 +48,7 @@ use/kernel/disable-usb-autosuspend:
 
 # for vm targets
 use/kernel/initrd-setup: use/kernel
+	@$(call add,BASE_PACKAGES,make-initrd)
 	@$(call try,VM_FSTYPE,ext4)
 	@$(call add,VM_INITRDMODULES,$$(VM_FSTYPE))
 	@$(call add,VM_INITRDMODULES,ahci.ko ahci_platform.ko sd_mod.ko)
