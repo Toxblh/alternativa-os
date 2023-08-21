@@ -83,11 +83,12 @@ mixin/regular-icewm: use/fonts/ttf/redhat +icewm +nm-gtk
 	@$(call add,THE_PACKAGES,mnt)
 
 # gdm2.20 can reboot/halt with both sysvinit and systemd, and is slim
-mixin/regular-gnustep: use/x11/gnustep use/mediacheck use/browser/seamonkey
+mixin/regular-gnustep: use/x11/gnustep use/mediacheck
 	@$(call add,THE_BRANDING,graphics)
 
 mixin/regular-cinnamon: use/x11/cinnamon use/x11/lightdm/slick +nm \
-	use/fonts/ttf/google use/im; @:
+	use/fonts/ttf/google use/im
+	@$(call add,THE_PACKAGES,xdg-user-dirs-gtk)
 
 mixin/regular-deepin: use/x11/deepin use/browser/chromium +nm; @:
 
@@ -100,7 +101,7 @@ mixin/regular-kde5: use/x11/kde5 use/browser/falkon \
 	use/x11/kde5-display-manager-lightdm \
 	use/fonts/ttf/google use/fonts/ttf/redhat use/fonts/zerg \
 	+pulse
-	@$(call add,THE_PACKAGES,kde5-telepathy)
+	@$(call add,THE_PACKAGES,kde5-telepathy plasma5-xdg-desktop-portal-kde)
 	@$(call add,THE_PACKAGES,qt6-wayland)
 ifneq (,$(filter-out e2k%,$(ARCH)))
 	@$(call add,THE_PACKAGES,falkon-kde5)

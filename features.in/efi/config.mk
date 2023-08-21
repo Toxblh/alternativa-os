@@ -27,7 +27,8 @@ use/efi/grub: use/efi use/bootloader/grub
 
 ifeq (x86_64,$(ARCH))
 use/efi/shell: use/efi
-	@$(call try,EFI_SHELL,efi-shell)
+	@$(call add,STAGE1_PACKAGES,efi-shell)
+	@$(call add,GRUB_CFG,shell_efi)
 
 use/efi/signed: use/efi
 	@$(call set,EFI_CERT,altlinux)
@@ -38,19 +39,9 @@ ifeq (,$(filter-out p10 c10f1,$(BRANCH)))
 	@$(call add,STAGE1_PACKAGES,shim-signed-installer-kludge grub-efi alt-uefi-certs dosfstools mtools)
 endif
 
-use/efi/lilo: use/efi use/bootloader/lilo
-	@$(call set,EFI_BOOTLOADER,elilo)
-
-use/efi/refind: use/efi
-	@$(call set,EFI_BOOTLOADER,refind)
-
-use/efi/memtest86: use/efi
-	@$(call set,EFI_MEMTEST86,efi-memtest86)
-
 else
 
-use/efi/signed use/efi/shell \
-	use/efi/refind use/efi/memtest86 use/efi/lilo: use/efi; @:
+use/efi/signed use/efi/shell: use/efi; @:
 
 endif
 
@@ -64,8 +55,8 @@ endif
 else
 
 # ignore on an unsupported target arch but make it hybrid at least
-use/efi use/efi/signed use/efi/debug use/efi/grub use/efi/lilo \
-  use/efi/refind use/efi/shell use/efi/memtest86: use/isohybrid; @:
+use/efi use/efi/signed use/efi/debug use/efi/grub \
+  use/efi/shell: use/isohybrid; @:
 
 endif
 
@@ -77,3 +68,6 @@ ifeq (,$(filter-out aarch64 riscv64,$(ARCH)))
 	@$(call add,EFI_FILES_REPLACE,dtb)
 endif
 endif
+
+use/efi/memtest86:
+	@echo Warning: use/efi/memtest86 is deprecated!!! >&2

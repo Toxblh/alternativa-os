@@ -11,14 +11,10 @@ distro/.regular-bare: distro/.base use/kernel/net use/docs/license \
 	@$(call add,STAGE1_PACKAGES,firmware-linux)
 	@$(call add,STAGE1_KMODULES,drm)
 	@$(call set,BOOTVGA,)
-ifeq (sisyphus,$(BRANCH))
-ifeq (,$(filter-out i586 x86_64,$(ARCH)))
-	@$(call set,BOOTLOADER,grubpcboot)
-endif
-endif
 
 # base target (for most images)
-distro/.regular-base: distro/.regular-bare use/vmguest use/memtest use/efi/dtb +efi; @:
+distro/.regular-base: distro/.regular-bare use/vmguest use/memtest \
+	use/efi/shell use/efi/dtb +efi; @:
 
 # graphical target (not enforcing xorg drivers or blobs)
 distro/.regular-x11: distro/.regular-base mixin/regular-x11 \
@@ -121,7 +117,7 @@ distro/regular-jeos-systemd: distro/.regular-jeos-full \
 ifeq (,$(filter-out i586 x86_64,$(ARCH)))
 # NB: no +efi as it brings in grub2 (no ELILO support for system boot)
 distro/regular-jeos-ovz: distro/.regular-jeos use/cleanup/jeos/full +sysvinit \
-	use/server/ovz-base use/control/server/ldv use/firmware use/bootloader/lilo
+	use/server/ovz-base use/control/server/ldv use/firmware
 	@$(call add,THE_PACKAGES,ipmitool lm_sensors3 mailx)
 endif
 
@@ -172,6 +168,9 @@ distro/regular-xfce-install: distro/.regular-install-x11-systemd \
 	mixin/regular-xfce; @:
 
 distro/regular-xfce-sysv: distro/.regular-gtk-sysv mixin/regular-xfce-sysv; @:
+ifeq (,$(filter-out i586 x86_64,$(ARCH)))
+	@$(call set,BOOTLOADER,isolinux)
+endif
 
 distro/regular-gnome-install: distro/.regular-install-x11-systemd mixin/regular-gnome \
 	use/kernel/latest +plymouth; @:
@@ -202,8 +201,7 @@ distro/regular-robo: distro/regular-mate use/live/ru use/x11/3d
 	@$(call add,THE_LISTS,robotics/reprap)
 	@$(call add,THE_LISTS,robotics/umki)
 
-distro/regular-rescue: distro/.regular-base mixin/regular-rescue  \
-	use/rescue/rw use/efi/shell use/efi/memtest86 \
+distro/regular-rescue: distro/.regular-base mixin/regular-rescue use/rescue/rw \
 	use/hdt use/syslinux/rescue_fm.cfg use/syslinux/rescue_remote.cfg \
 	use/grub/rescue_fm.cfg use/grub/rescue_remote.cfg \
 	use/mediacheck use/stage2/kms use/kernel/latest +wireless
