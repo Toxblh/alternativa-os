@@ -24,11 +24,11 @@ Requires: mkimage-preinstall
 %define mpdir %_datadir/%name
 %add_findreq_skiplist %mpdir/*.in/*
 
-%ifarch loongarch64
-# No java here [yet]
-%def_without doc
-%else
+%if %_build_cpu != "loongarch64"
 %def_with doc
+%else
+# XXX: documentation tools dependencies are INSANE (java)
+%def_without doc
 %endif
 %define docs $HOME/docs
 
