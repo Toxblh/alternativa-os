@@ -24,7 +24,12 @@ Requires: mkimage-preinstall
 %define mpdir %_datadir/%name
 %add_findreq_skiplist %mpdir/*.in/*
 
+%ifarch loongarch64
+# No java here [yet]
+%def_without doc
+%else
 %def_with doc
+%endif
 %define docs $HOME/docs
 
 Summary(ru_RU.UTF-8): метапрофиль дистрибутивов на базе Альт
