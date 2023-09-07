@@ -19,7 +19,7 @@ mixin/kworkstation-common-deps: \
 	use/l10n/default/ru_RU \
 	use/control use/services \
 	use/x11/intel use/x11/radeon use/x11/amdgpu use/x11/nvidia \
-	use/x11/sddm use/x11/wacom \
+	use/x11/kde5-display-manager-lightdm use/x11/wacom \
 	use/memtest \
 	use/init/systemd \
 	use/cleanup/live-no-cleanupdb \
@@ -95,9 +95,13 @@ endif
 	@$(call add,SERVICES_DISABLE,openl2tp)
 	@$(call add,SERVICES_DISABLE,slapd)
 	@$(call add,SERVICES_ENABLE,snapd.socket)
+	@$(call add,SERVICES_ENABLE,power-profiles-daemon.service)
 	@$(call add,CLEANUP_BASE_PACKAGES,'libwbclient-sssd')
 	@$(call add,CLEANUP_PACKAGES,'^kernel-modules-drm-nouveau.*')
 	@$(call add,CLEANUP_PACKAGES,'xterm')
+	@$(call add,CLEANUP_LIVE_PACKAGES,'xterm')
+	@$(call add,CLEANUP_PACKAGES,'udev-rule-generator-net')
+	@$(call add,CLEANUP_LIVE_PACKAGES,'livecd-main-repo')
 	@$(call set,META_VOL_SET,ALT)
 	@$(call set,META_PUBLISHER,BaseALT Ltd)
 	@$(call set,META_VOL_ID,ALT Workstation K $(DISTRO_VERSION)$(STATUS))
@@ -117,6 +121,7 @@ mixin/kworkstation-install-opts:
 	@$(call add,STAGE1_MODLISTS,stage2-ntfs)
 	@$(call add,STAGE2_KMODULES,drm-nouveau)
 	@$(call add,THE_PACKAGES,installer-feature-nfs-client-stage3)
+	@$(call add,BASE_PACKAGES,plasma5-welcome)
 	@$(call add,INSTALL2_PACKAGES,ntfs-3g)
 	@$(call add,INSTALL2_PACKAGES,btrfs-progs)
 	@$(call add,INSTALL2_PACKAGES,installer-feature-samba-usershares-kde-stage2)
@@ -136,6 +141,7 @@ mixin/kworkstation-install-opts:
 	@$(call add,INSTALL2_PACKAGES,installer-feature-xprofile-clear)
 	@$(call add,INSTALL2_PACKAGES,installer-feature-systemd-oomd)
 	@$(call add,INSTALL2_PACKAGES,installer-feature-webterminal-setup)
+	@$(call add,INSTALL2_PACKAGES,installer-feature-remove-xorgconf)
 	@$(call add,INSTALL2_PACKAGES,apt-scripts-nvidia)
 	@$(call add,INSTALL2_PACKAGES,volumes-profile-kdesktop)
 	@$(call add,INSTALL2_PACKAGES,udev-rules-ioschedulers)

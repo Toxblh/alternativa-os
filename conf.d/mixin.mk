@@ -89,10 +89,13 @@ mixin/regular-gnustep: use/x11/gnustep use/mediacheck
 mixin/regular-cinnamon: use/x11/cinnamon use/x11/lightdm/slick +nm \
 	use/fonts/ttf/google use/im
 	@$(call add,THE_PACKAGES,xdg-user-dirs-gtk)
+	@$(call add,THE_PACKAGES,gnome-disk-utility gnome-system-monitor)
 
 mixin/regular-deepin: use/x11/deepin use/browser/chromium +nm; @:
 
 mixin/regular-gnome: use/x11/gnome use/fonts/ttf/redhat +nm
+	@$(call add,THE_PACKAGES,gnome-terminal)
+	@$(call add,PINNED_PACKAGES,gnome-terminal:Required)
 	@$(call add,THE_PACKAGES,templates)
 	@$(call add,THE_PACKAGES,chrome-gnome-shell)
 	@$(call add,THE_PACKAGES,qt5-wayland qt6-wayland)
