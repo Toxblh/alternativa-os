@@ -6,7 +6,7 @@ use/install2: use/stage2 sub/stage2@install2 use/metadata \
 	use/cleanup/installer use/install2/autoinstall use/grub/install2.cfg
 	@$(call add_feature)
 	@$(call add,INSTALL2_PACKAGES,installer-common-stage2)
-	@$(call try,INSTALLER,altlinux-generic)	# might be replaced later
+	@$(call try,INSTALLER,regular)	# might be replaced later
 	@$(call add,INSTALL2_PACKAGES,installer-distro-$$(INSTALLER)-stage2)
 	@$(call add,INSTALL2_PACKAGES,branding-$$(BRANDING)-alterator)
 	@$(call add,BASE_PACKAGES,branding-$$(BRANDING)-release)
@@ -29,6 +29,11 @@ use/install2/full: \
 	use/syslinux/ui/menu use/bootloader
 	@$(call add,INSTALL2_PACKAGES,xorg-drv-synaptics)
 	@$(call add,INSTALL2_PACKAGES,xorg-drv-libinput)
+
+use/install2/oem: use/install2
+	@$(call add,INSTALL2_PACKAGES,installer-feature-oem-stage2)
+	@$(call add,MAIN_PACKAGES,alterator-setup)
+	@$(call add,MAIN_PACKAGES,installer-feature-alterator-setup-stage2)
 
 use/install2/lvm: use/install2
 	@$(call add,INSTALL2_PACKAGES,lvm2)

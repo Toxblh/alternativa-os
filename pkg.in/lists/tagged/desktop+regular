@@ -1,8 +1,6 @@
 synaptic
 synaptic-usermode
 
-userpasswd
-
 xdg-user-dirs
 
 alterator-browser-qt
@@ -36,7 +34,6 @@ cpu-x@X86
 exfatprogs
 hdparm
 inxi
-lcdtest
 lm_sensors3
 lsblk
 sdparm
