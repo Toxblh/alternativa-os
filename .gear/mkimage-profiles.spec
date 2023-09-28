@@ -1,5 +1,5 @@
 Name: mkimage-profiles
-Version: 1.5.11
+Version: 1.5.12
 Release: alt1
 
 Summary: ALT based distribution metaprofile
@@ -134,6 +134,20 @@ mv %buildroot%mpdir/doc/mkimage-profiles.7 %buildroot%_man7dir/
 %endif
 
 %changelog
+* Fri Sep 29 2023 Anton Midyukov <antohami@altlinux.org> 1.5.12-alt1
+- pkgpriorities: fix clash 50-pkgpriorities.mk,
+  fix usage for main subprofile
+- branding: add release to use/branding
+- stage2: add STAGE2_BOOTARGS=udev.log_level=err (ALT bug 37201)
+- build.mk: replace obsoleted GREP_COLOR with GREP_COLORS
+- x11: install radeon/amdgpu drivers on loongarch64 (thx @asheplyakov)
+- grub: do make a graphical boot menu on LoongArch (thx @asheplyakov)
+- live.mk: add use/stage2/kms to grub-net-install
+- mixin.mk: add power-profiles-daemon (ALT bug 47679)
+- latest commit for alt-server server (thx @jqt4)
+- latest commits for alt-education (thx @cas)
+- spec: don't build documentation on LoongArch (thx @asheplyakov)
+
 * Mon Sep 25 2023 Anton Midyukov <antohami@altlinux.org> 1.5.11-alt1
 - init: add setup-vconsole-kludge for aarch64 also
 - arm-rpi4: copy dtb from vendor broadcom dir, if exists
