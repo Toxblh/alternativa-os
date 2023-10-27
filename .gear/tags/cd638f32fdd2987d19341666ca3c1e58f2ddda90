@@ -1,0 +1,23 @@
+object 4b6a97d30011431b9d78b43517bc036cf78d05b3
+type commit
+tag v1.5.13
+tagger Anton Midyukov <antohami@altlinux.org> 1698398340 +0700
+
+v1.5.13
+
+- remove lilo support
+- image.in/Makefile: fix show image size
+- oem: do not set English language by default
+- services: Add (un)mask systemd units (thx @jqt4)
+- grub: add variable DISABLE_LANG_MENU
+- oem: fix enabled oem.target
+- x11-autostart: do not require use/x11
+- Revert "initrd-propagator: add {STAGE2,RESCUE}_BOOTARGS=udev.log_level=err"
+- l10n: set KEYMAP in vconsole.conf if exist
+- initrd-bootchain: exclude initrd feature kbd
+- live-install: remove use/live-install/vnc
+- live-install: add use/live-install-pkg
+- oem: add systemd.unit=setup.target to kernel cmdline
+- alt-education: sync with ALT Education 10.2 (thx @cas)
+- slinux: sync with Simply Linux 10.2 (thx @sem)
+- alt-server: add latest commits (thx @jqt4)
