@@ -95,18 +95,22 @@ mixin/regular-deepin: use/x11/deepin use/browser/chromium +nm; @:
 mixin/regular-gnome: use/x11/gnome use/fonts/ttf/redhat +nm
 	@$(call add,THE_PACKAGES,power-profiles-daemon)
 	@$(call add,THE_PACKAGES,gnome-terminal)
+	@$(call add,THE_PACKAGES,gnome-software)
 	@$(call add,PINNED_PACKAGES,gnome-terminal:Required)
 	@$(call add,THE_PACKAGES,templates)
 	@$(call add,THE_PACKAGES,chrome-gnome-shell)
 	@$(call add,THE_PACKAGES,qt5-wayland qt6-wayland)
+	@$(call add,THE_PACKAGES,cups-pk-helper cups)
+	@$(call add,THE_PACKAGES,eepm)
+	@$(call add,THE_PACKAGES,fonts-ttf-lxgw-wenkai)
 
 mixin/regular-kde5: use/x11/kde5 use/browser/falkon \
 	use/x11/kde5-display-manager-lightdm \
 	use/fonts/ttf/google use/fonts/ttf/redhat use/fonts/zerg \
 	+pulse
-	@$(call add,THE_PACKAGES,kde5-telepathy plasma5-xdg-desktop-portal-kde)
+	@$(call add,THE_PACKAGES,plasma5-xdg-desktop-portal-kde)
 	@$(call add,THE_PACKAGES,qt6-wayland)
-ifneq (,$(filter-out e2k%,$(ARCH)))
+ifneq (,$(filter-out e2k% riscv64 loongarch64,$(ARCH)))
 	@$(call add,THE_PACKAGES,falkon-kde5)
 endif
 

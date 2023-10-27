@@ -19,6 +19,8 @@ use/slinux/services-enabled: use/services
 	@$(call add,SYSTEMD_SERVICES_ENABLE,cups.service)
 	@$(call add,SYSTEMD_SERVICES_ENABLE,cups.socket)
 	@$(call add,SYSTEMD_SERVICES_ENABLE,cups-browsed.service)
+	@$(call add,SYSTEMD_SERVICES_ENABLE,dnsmasq.service)
+	@$(call add,SYSTEMD_SERVICES_ENABLE,fstrim.timer)
 	@$(call add,SYSTEMD_SERVICES_ENABLE,lightdm.service)
 	@$(call add,SYSTEMD_SERVICES_ENABLE,lvm2-monitor.service)
 	@$(call add,SYSTEMD_SERVICES_ENABLE,network.service)
@@ -38,9 +40,13 @@ use/slinux/services-disabled: use/services
 	@$(call add,SYSTEMD_SERVICES_DISABLE,openvpn.service)
 	@$(call add,SYSTEMD_SERVICES_DISABLE,sshd.service)
 	@$(call add,SYSTEMD_SERVICES_DISABLE,syslogd.service)
-	@$(call add,SYSTEMD_SERVICES_DISABLE,dnsmasq.service)
 
 use/slinux/services: use/slinux/services-enabled use/slinux/services-disabled
+
+use/slinux/control: use/control
+	@$(call add,CONTROL,libnss-role:enabled)
+	@$(call add,CONTROL,sudoers:relaxed)
+	@$(call add,CONTROL,sudowheel:enabled)
 
 use/slinux/vm-base:: vm/systemd \
 	use/oem/distro use/slinux/mixin-base
@@ -62,13 +68,17 @@ use/slinux/vm-base:: use/oem/vnc
 	@$(call set,KFLAVOURS,un-def)
 endif
 
-use/slinux/mixin-base: use/slinux use/x11/xorg use/x11/lightdm/gtk +pulse \
+use/slinux/mixin-base: use/slinux \
+	+x11 use/x11/3d \
+	use/x11/lightdm/gtk +pulse \
 	+nm use/x11/gtk/nm +systemd +systemd-optimal +wireless \
 	use/l10n/default/ru_RU \
 	use/ntp/chrony \
 	use/office/LibreOffice/full \
 	use/docs/manual use/docs/indexhtml \
-	use/xdg-user-dirs/deep use/slinux/services
+	use/xdg-user-dirs use/xdg-user-dirs/deep \
+	use/slinux/services use/slinux/control
+	@$(call set,NVIDIA_PACKAGES,nvidia-xconfig)
 	@$(call set,DOCS,simply-linux)
 	@$(call add,THE_LISTS,gnome-p2p)
 	@$(call add,THE_LISTS,slinux/misc-base)
@@ -113,13 +123,14 @@ use/slinux/base: use/isohybrid use/luks \
 	use/branding/complete \
 	mixin/desktop-installer \
 	use/firmware/laptop \
-	use/vmguest/kvm/x11 use/stage2/kms \
+	use/vmguest/kvm/x11 use/stage2/kms/nvidia \
 	use/e2k/multiseat/full use/e2k/x11/101 use/e2k/sound/401 \
 	use/slinux/mixin-base
 ifeq (,$(filter-out i586 x86_64,$(ARCH)))
 	@$(call set,BOOTLOADER,grubpcboot)
 endif
-	@$(call add,STAGE2_PACKAGES,xorg-conf-libinput-touchpad)
+	@$(call add,INSTALL2_PACKAGES,xorg-conf-libinput-touchpad)
+	@$(call add,STAGE2_PACKAGES,btrfs-progs)
 
 use/slinux/full: use/slinux/base \
 	use/install2/repo
