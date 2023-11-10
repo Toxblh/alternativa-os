@@ -12,12 +12,18 @@ bluez
 # base applications
 gnome-control-center
 phosh-mobile-settings
+alt-tweaks
 gnome-software
 
+# extra applications
+phosh-antispam
+
 # file manager
-nautilus
+portfolio
 tracker3
-templates
+
+# screen recording for wlroots-based compositors
+wf-recorder
 
 # base libraries
 at-spi2-core

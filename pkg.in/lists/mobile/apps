@@ -15,8 +15,10 @@ geary
 # multimedia
 megapixels
 snapshot
+cheese
 mpv
 totem
+clapper
 amberol
 lollypop
 shortwave
@@ -45,6 +47,7 @@ gnome-calculator
 gnome-clocks
 gnome-calendar
 gnome-characters
+gnome-compass
 gnome-maps
 gnome-weather
 grim

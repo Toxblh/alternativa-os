@@ -106,6 +106,7 @@ use/x11/wacom: use/x11
 ## display managers
 use/x11/dm: use/x11-autostart use/pkgpriorities
 	@$(call try,THE_DISPLAY_MANAGER,xdm)
+	@$(call try,THE_DM_SERVICE,dm)
 	@$(call add,THE_PACKAGES,$$(THE_DISPLAY_MANAGER))
 	@$(call add,PINNED_PACKAGES,$$(THE_DISPLAY_MANAGER))
 	@$(call add,DEFAULT_SERVICES_ENABLE,$$(THE_DM_SERVICE))
@@ -116,8 +117,7 @@ use/x11/lightdm/gtk use/x11/lightdm/slick use/x11/lightdm/kde\
 	@$(call set,THE_DISPLAY_MANAGER,lightdm-$*-greeter)
 	@$(call set,THE_DM_SERVICE,lightdm)
 
-use/x11/lxdm use/x11/gdm2.20 use/x11/sddm \
-	use/x11/kde5-display-manager-sddm: \
+use/x11/gdm2.20: \
 	use/x11/%: use/x11/dm
 	@$(call set,THE_DISPLAY_MANAGER,$*)
 
@@ -125,9 +125,8 @@ use/x11/kde5-display-manager-lightdm: \
 	use/x11/%: use/x11/dm
 	@$(call set,THE_DISPLAY_MANAGER,$*)
 	@$(call set,THE_DM_SERVICE,lightdm)
-	@$(call add,PINNED_PACKAGES,kde5-display-manager-sddm:Extra)
 
-use/x11/gdm: \
+use/x11/gdm use/x11/sddm use/x11/lxdm: \
 	use/x11/%: use/x11/dm
 	@$(call set,THE_DISPLAY_MANAGER,$*)
 	@$(call set,THE_DM_SERVICE,$*)
@@ -150,14 +149,14 @@ use/x11/xfce: use/x11
 	@$(call add,THE_PACKAGES,xfce4-minimal xfce4-default)
 	@$(call add,IM_PACKAGES,imsettings-xfce)
 
-use/x11/xfce/full: use/x11/xfce +pulse
+use/x11/xfce/full: use/x11/xfce +pipewire
 	@$(call add,THE_PACKAGES,xfce4-full)
 
-use/x11/cinnamon: use/x11/xorg +pulse
+use/x11/cinnamon: use/x11/xorg +pipewire
 	@$(call add,THE_LISTS,$(call tags,cinnamon desktop))
 	@$(call add,IM_PACKAGES,imsettings-cinnamon)
 
-use/x11/deepin: use/x11/xorg +pulse
+use/x11/deepin: use/x11/xorg +pipewire
 	@$(call add,THE_LISTS,$(call tags,deepin desktop))
 
 use/x11/gnome: use/x11/xorg use/x11/gdm +pipewire
@@ -165,14 +164,14 @@ use/x11/gnome: use/x11/xorg use/x11/gdm +pipewire
 	@$(call add,THE_PACKAGES,tracker3) # ALT bug 42028
 	@$(call add,IM_PACKAGES,imsettings-gsettings)
 
-use/x11/enlightenment: use/x11 use/net/connman use/power/acpi +pulse
+use/x11/enlightenment: use/x11 use/net/connman use/power/acpi +pipewire
 	@$(call add,THE_LISTS,$(call tags,enlightenment desktop))
 
 use/x11/lxde: use/x11
 	@$(call add,THE_LISTS,$(call tags,lxde desktop))
 	@$(call add,IM_PACKAGES,imsettings-lxde)
 
-use/x11/lxqt: use/x11 +pulse
+use/x11/lxqt: use/x11 +pipewire
 	@$(call add,THE_LISTS,$(call tags,desktop && lxqt))
 	@$(call add,IM_PACKAGES,imsettings-qt)
 
@@ -185,7 +184,7 @@ use/x11/wmaker: use/x11
 use/x11/gnustep: use/x11
 	@$(call add,THE_LISTS,$(call tags,gnustep desktop))
 
-use/x11/mate: use/x11 +pulse
+use/x11/mate: use/x11 +pipewire
 	@$(call add,THE_LISTS,$(call tags,mate desktop))
 	@$(call add,IM_PACKAGES,imsettings-mate)
 
@@ -195,8 +194,10 @@ use/x11/dwm: use/x11
 use/x11/leechcraft: use/x11
 	@$(call add,THE_PACKAGES,leechcraft)
 
-use/x11/kde5: use/x11/xorg use/x11/kde/synaptic
+use/x11/kde5: use/x11/xorg +pipewire
 	@$(call add,THE_PACKAGES,kde5)
+	@$(call add,THE_PACKAGES,kde5-volume-control-4-pipewire)
+	@$(call add,PINNED_PACKAGES,kde5-volume-control-4-pipewire)
 
 ## screensavers
 use/x11/xscreensaver:
