@@ -1,0 +1,13 @@
+object 9c89b20644b4c502875c404db6a5d8eedb4c791e
+type commit
+tag v1.5.14
+tagger Anton Midyukov <antohami@altlinux.org> 1699626205 +0700
+
+v1.5.14
+
+- image.in/Makefile: fix show out image size
+- distro.mk: fix VOL_SET when is empty (fixed typo)
+- x11, mixim.mk: replace pulseaudio with pipewire
+- x11: enable dm.service as a fallback and other improvements
+- regular-vm.mk: increaze size vm image (desktops to 8 GiB, jeos to 4 GiB)
+- deflogin: add missing groups (video, camera, cdrom, floppy)
