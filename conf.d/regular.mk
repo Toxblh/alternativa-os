@@ -46,7 +46,7 @@ endif
 
 # WM base target
 distro/.regular-wm: distro/.regular-x11 \
-	mixin/regular-desktop \
+	mixin/regular-desktop use/vmguest/dri \
 	use/live/rw +live-installer
 	@$(call set,GRUB_DEFAULT,live)
 	@$(call set,SYSLINUX_DEFAULT,live)
@@ -93,7 +93,7 @@ distro/.regular-jeos: distro/.regular-jeos-base \
 	use/syslinux/lateboot.cfg use/cleanup/jeos
 	@$(call add,BASE_PACKAGES,make-initrd-mdadm cpio)
 
-distro/.regular-jeos-full: distro/.regular-jeos use/install2/vmguest \
+distro/.regular-jeos-full: distro/.regular-jeos \
 	use/volumes/regular use/ntp/chrony use/bootloader/grub \
 	use/grub/localboot_bios.cfg use/kernel/latest +efi
 	@$(call add,BASE_PACKAGES,nfs-utils gdisk)
@@ -108,6 +108,7 @@ else
 	@$(call add,CLEANUP_PACKAGES,bridge-utils)
 endif
 	@$(call add,DEFAULT_SERVICES_DISABLE,fbsetfont)
+	@$(call add,INSTALL2_PACKAGES,xorg-dri-vmwgfx xorg-dri-virtio)
 
 # NB:
 # - stock cleanup is not enough (or installer-common-stage3 deps soaring)
@@ -115,7 +116,7 @@ distro/regular-jeos-sysv: distro/.regular-jeos-full use/cleanup/jeos/full \
 	+sysvinit +power
 	@$(call add,BASE_PACKAGES,apt-conf-ignore-systemd)
 
-distro/regular-jeos-systemd: distro/.regular-jeos-full \
+distro/regular-jeos-systemd: distro/.regular-jeos-full use/install2/vmguest \
 	+systemd +systemd-optimal
 	@$(call add,BASE_PACKAGES,glibc-locales)
 
@@ -123,17 +124,14 @@ distro/.regular-install-x11: distro/.regular-install +vmguest +wireless \
 	use/install2/suspend mixin/regular-desktop mixin/regular-x11 \
 	use/branding/complete use/branding/slideshow/once
 
-# assumes somewhat more experienced user
-distro/.regular-install-x11-full: distro/.regular-install-x11 \
-	use/fonts/otf/adobe use/fonts/otf/mozilla use/fonts/chinese \
-	mixin/desktop-installer use/install2/fs use/efi/shell use/rescue/base
-	@$(call add,RESCUE_LISTS,$(call tags,rescue misc))
-	@$(call add,MAIN_PACKAGES,anacron man-whatis usb-modeswitch)
-
 distro/.regular-install-x11-systemd: distro/.regular-install-x11 \
 	use/x11/lightdm/gtk +systemd +systemd-optimal
 	@$(call add,THE_PACKAGES,bluez)
 	@$(call add,DEFAULT_SERVICES_ENABLE,bluetoothd)
+
+distro/regular-icewm: distro/.regular-gtk mixin/regular-icewm \
+	use/kernel/latest
+	@$(call add,THE_PACKAGES,icewm-startup-polkit-gnome)
 
 distro/regular-icewm-sysv: distro/.regular-gtk-sysv mixin/regular-icewm \
 	use/kernel/latest; @:
@@ -164,17 +162,8 @@ endif
 distro/regular-xfce-install: distro/.regular-install-x11-systemd \
 	mixin/regular-xfce; @:
 
-distro/regular-xfce-sysv: distro/.regular-gtk-sysv mixin/regular-xfce-sysv
-	@$(call set,KFLAVOURS,std-def)
-ifeq (,$(filter-out i586 x86_64,$(ARCH)))
-	@$(call set,BOOTLOADER,isolinux)
-endif
-
 distro/regular-gnome-install: distro/.regular-install-x11-systemd mixin/regular-gnome \
 	use/kernel/latest +plymouth; @:
-
-distro/regular-xfce-sysv-install: distro/.regular-install-x11-full \
-	mixin/regular-xfce-sysv use/init/sysv/polkit use/x11/gdm2.20; @:
 
 distro/regular-lxde: distro/.regular-gtk mixin/regular-lxde; @:
 
@@ -186,7 +175,13 @@ distro/regular-cinnamon: distro/.regular-gtk mixin/regular-cinnamon; @:
 
 # not .regular-gtk due to gdm vs lightdm
 distro/regular-gnome: distro/.regular-desktop mixin/regular-gnome \
-	use/kernel/latest +plymouth use/browser/epiphany; @:
+	use/kernel/latest +plymouth use/browser/epiphany \
+	use/live-install/vnc/listen; @:
+ifeq (,$(filter-out x86_64 aarch64,$(ARCH)))
+ifeq (sisyphus,$(BRANCH))
+	@$(call set,KFLAVOURS,std-def un-def)
+endif
+endif
 
 distro/regular-lxqt: distro/.regular-gtk mixin/regular-lxqt +plymouth; @:
 
@@ -200,7 +195,7 @@ distro/regular-rescue: distro/.regular-base mixin/regular-rescue use/rescue/rw \
 	use/grub/rescue_fm.cfg use/grub/rescue_remote.cfg \
 	use/mediacheck use/stage2/kms use/kernel/latest +wireless
 	@$(call add,RESCUE_PACKAGES,gpm livecd-net-eth)
-	@$(call add,RESCUE_LISTS,$(call tags,base bench))
+#	@$(call add,RESCUE_LISTS,$(call tags,base bench))
 	@$(call add,RESCUE_LISTS,$(call tags,network security))
 
 distro/regular-rescue-netbootxyz: distro/.regular-bare mixin/regular-rescue

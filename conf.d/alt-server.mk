@@ -6,13 +6,13 @@ distro/alt-server: server_groups_primary = $(addprefix centaurus/,\
 
 ifeq (,$(filter-out x86_64 ppc64le aarch64,$(ARCH)))
 distro/alt-server: server_groups_virtipa = $(addprefix centaurus/,\
-	v12n-server freeipa-server)
+	freeipa-server)
 endif
 endif
 
 ifeq (,$(filter-out i586 x86_64 ppc64le aarch64 e2k%,$(ARCH)))
 distro/alt-server: server_groups_desktop = $(addprefix centaurus/,\
-        80-desktop emulators freenx-server mate office pidgin vlc xorg scanning)
+        80-desktop emulators freenx-server mate office pidgin vlc xorg scanning samba)
 endif
 
 ifeq (,$(filter-out x86_64,$(ARCH)))

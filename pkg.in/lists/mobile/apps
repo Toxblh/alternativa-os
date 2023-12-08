@@ -10,6 +10,7 @@ gnome-console
 # web, mail
 chromium@!riscv64
 firefox
+epiphany
 geary
 
 # multimedia
@@ -22,6 +23,7 @@ clapper
 amberol
 lollypop
 shortwave
+easyeffects
 
 # readers
 evince
@@ -42,6 +44,17 @@ fonts-ttf-lxgw-wenkai
 # Dictaphone
 gnome-sound-recorder
 
+# notes & organizers
+iotas
+reminders
+errands
+
+# medical
+gnome-dosage
+
+# translation
+dialect
+
 # misc
 gnome-calculator
 gnome-clocks
@@ -51,6 +64,12 @@ gnome-compass
 gnome-maps
 gnome-weather
 grim
+obfuscate
+tangram
+kana
+solanum
+gnome-games-chess
+gnome-games-sudoku
 wallpapers-mobile
 # libadwaita theme ported to gtk3
 # $ gsettings get org.gnome.desktop.interface gtk-theme

@@ -37,6 +37,39 @@ mixin/e2k-mate: use/e2k/x11 use/x11/xorg use/fonts/install2 \
 	@$(call add,THE_PACKAGES,ethtool net-tools ifplugd)
 	@$(call add,THE_PACKAGES,zsh bash-completion)
 
+mixin/vm-archdep:: use/auto-resize; @:
+
+ifeq (,$(filter-out i586 x86_64 aarch64,$(ARCH)))
+mixin/vm-archdep:: +efi
+ifeq (,$(filter-out p10,$(BRANCH)))
+	@$(call set,KFLAVOURS,un-def)
+else
+	@$(call set,KFLAVOURS,std-def un-def)
+endif
+endif
+
+ifeq (,$(filter-out armh,$(ARCH)))
+mixin/vm-archdep::
+	@$(call set,KFLAVOURS,un-def mp)
+endif
+
+
+ifeq (,$(filter-out armh aarch64,$(ARCH)))
+mixin/vm-archdep:: use/bootloader/uboot use/no-sleep use/arm-rpi4; @:
+endif
+
+ifeq (,$(filter-out mipsel,$(ARCH)))
+mixin/vm-archdep:: use/tty/S0
+	@$(call set,KFLAVOURS,un-malta)
+endif
+
+ifeq (,$(filter-out riscv64,$(ARCH)))
+mixin/vm-archdep:: use/bootloader/uboot
+	@$(call set,KFLAVOURS,un-def)
+endif
+
+mixin/vm-archdep-x11: mixin/vm-archdep use/vmguest/kvm/x11; @:
+
 ### regular.mk
 mixin/regular-x11: use/browser/firefox \
 	use/branding use/ntp/chrony use/services/lvm2-disable
@@ -55,7 +88,9 @@ mixin/regular-desktop: +alsa +nm-native \
 	use/fonts/otf/adobe use/fonts/otf/mozilla use/branding/notes
 	@$(call set,LOCALES,en_US ru_RU pt_BR)
 	@$(call add,THE_PACKAGES,pam-limits-desktop beesu polkit dvd+rw-tools)
+ifeq (p10,$(BRANCH))
 	@$(call add,THE_PACKAGES,polkit-rule-admin-root)
+endif
 	@$(call add,THE_BRANDING,alterator graphics indexhtml)
 ifneq (,$(filter-out e2k%,$(ARCH)))
 	@$(call add,THE_BRANDING,notes)
@@ -85,14 +120,14 @@ mixin/regular-icewm: use/fonts/ttf/redhat +icewm +nm-gtk
 mixin/regular-gnustep: use/x11/gnustep use/mediacheck
 	@$(call add,THE_BRANDING,graphics)
 
-mixin/regular-cinnamon: use/x11/cinnamon use/x11/lightdm/slick +nm \
+mixin/regular-cinnamon: use/x11/cinnamon use/x11/lightdm/slick +nm-gtk \
 	use/fonts/ttf/google use/im
 	@$(call add,THE_PACKAGES,xdg-user-dirs-gtk)
 	@$(call add,THE_PACKAGES,gnome-disk-utility gnome-system-monitor)
 
 mixin/regular-deepin: use/x11/deepin use/browser/chromium +nm; @:
 
-mixin/regular-gnome: use/x11/gnome use/fonts/ttf/redhat +nm
+mixin/regular-gnome: use/x11/gnome use/fonts/ttf/redhat +nm-gtk4
 	@$(call add,THE_PACKAGES,power-profiles-daemon)
 	@$(call add,THE_PACKAGES,gnome-terminal)
 	@$(call add,THE_PACKAGES,gnome-software)
@@ -124,10 +159,6 @@ mixin/xfce-base: use/x11/xfce +nm-gtk \
 mixin/regular-xfce: mixin/xfce-base use/domain-client +pipewire
 	@$(call add,THE_PACKAGES,pavucontrol xscreensaver-frontend)
 	@$(call add,THE_PACKAGES,xfce4-pulseaudio-plugin xfce-polkit)
-
-mixin/regular-xfce-sysv: mixin/xfce-base +net-eth \
-	use/fonts/otf/adobe use/fonts/otf/mozilla
-	@$(call add,THE_LISTS,xfce-sysv)
 
 mixin/regular-lxde: use/x11/lxde use/im +nm-gtk
 	@$(call add,THE_PACKAGES,qasmixer qpdfview)

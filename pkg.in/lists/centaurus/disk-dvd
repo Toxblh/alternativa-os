@@ -114,6 +114,16 @@ haproxy
 keepalived
 eepm
 
+qemu-kvm
+qemu-img
+libvirt
+libvirt-kvm
+libvirt-daemon-driver-lxc
+lxc
+dnsmasq
+
+mate-screensaver-screenkeyboard
+
 # gostcrypo repo component is needed
 openvpn-gostcrypto
 openvpn-plugins-gostcrypto

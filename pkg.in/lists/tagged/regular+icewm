@@ -5,8 +5,11 @@ icewm-startup-simple-sound
 xxkb
 icewm-startup-xxkb-tray
 
+mount-tray
+icewm-startup-mount-tray
+
 iftop
-mutt
+#mutt
 elinks
 lftp
 
@@ -17,11 +20,3 @@ leafpad
 
 gqview
 screengrab
-design-icewm-themes
-icewm-theme-darkt
-icewm-theme-silverxp
-
-rp-pppoe-gui
-
-spacefm
-icewm-startup-spacefm
