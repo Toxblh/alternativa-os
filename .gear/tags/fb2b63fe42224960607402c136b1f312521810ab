@@ -1,0 +1,9 @@
+object 83120c8743e5432c103794b604754fffc3bc3bbc
+type commit
+tag v1.5.15.1
+tagger Anton Midyukov <antohami@altlinux.org> 1702135226 +0700
+
+v1.5.15.1
+
+- fix vmguest feature for non-x86 architectures (thx Alexey Sheplyakov
+  @asheplyakov)
