@@ -35,12 +35,14 @@ distro/.regular-x11: distro/.regular-base mixin/regular-x11 \
 	@$(call add,DEFAULT_SERVICES_DISABLE,gpm powertop)
 
 # Network install
+ifeq (,$(filter-out i586 x86_64 aarch64 ppc64le riscv64 loongarch64,$(ARCH)))
 distro/regular-net-install: distro/grub-net-install; @:
 ifeq (sisyphus,$(BRANCH))
 ifeq (,$(filter-out i586 x86_64,$(ARCH)))
 	@$(call set,BOOTCHAIN_OEM_URL_NETINST,/sisyphus/snapshots/$(DATE)/regular-NAME-$(DATE)-$(ARCH).iso)
 else
 	@$(call set,BOOTCHAIN_OEM_URL_NETINST,/sisyphus-$(ARCH)/snapshots/$(DATE)/regular-NAME-$(DATE)-$(ARCH).iso)
+endif
 endif
 endif
 
@@ -50,6 +52,9 @@ distro/.regular-wm: distro/.regular-x11 \
 	use/live/rw +live-installer
 	@$(call set,GRUB_DEFAULT,live)
 	@$(call set,SYSLINUX_DEFAULT,live)
+ifeq (,$(filter-out i586 x86_64,$(ARCH)))
+	@$(call add,THE_PACKAGES,xorg-drv-vmware) # for virtualbox with VMSVGA
+endif
 
 # DE base target
 # TODO: use/plymouth/live when luks+plymouth is done, see also #28255
@@ -108,7 +113,12 @@ else
 	@$(call add,CLEANUP_PACKAGES,bridge-utils)
 endif
 	@$(call add,DEFAULT_SERVICES_DISABLE,fbsetfont)
-	@$(call add,INSTALL2_PACKAGES,xorg-dri-vmwgfx xorg-dri-virtio)
+ifeq (,$(filter-out i586 x86_64,$(ARCH)))
+	@$(call add,INSTALL2_PACKAGES,xorg-dri-vmwgfx)
+endif
+ifneq (,$(filter-out e2k%,$(ARCH)))
+	@$(call add,INSTALL2_PACKAGES,xorg-dri-virtio)
+endif
 
 # NB:
 # - stock cleanup is not enough (or installer-common-stage3 deps soaring)
