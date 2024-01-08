@@ -1,9 +1,0 @@
-object 5d8db398990ee69479b0c64c1de736f1eff578dc
-type commit
-tag v1.5.15.2
-tagger Anton Midyukov <antohami@altlinux.org> 1702406358 +0700
-
-v1.5.15.2
-
-- Fix vmguest feature after commit "vmguest: simplify the code"
-- various fixes for regular.mk
