@@ -1,0 +1,18 @@
+object 303f6a680027881d25934f708a3761e90cbc56ac
+type commit
+tag v1.6.0
+tagger Anton Midyukov <antohami@altlinux.org> 1707493934 +0700
+
+v1.6.0
+
+- rename phone.mk -> mobile.mk, drop feature phone
+- live: refactoring 60-live-rescue-root, add autologin root to serial tty
+  in rescue mode
+- efi: add mockutil, pesign to rescue only
+- Add VERSION file for build doc
+- doc: do not use images from asciidoc, add missing images (fix FTBFS)
+- mediacheck: show "Error: implantisomd5 is not available" on screen
+- grub, syslinux: add lowmem to 25install-vnc-* also
+- Add support patches from image-paches.d/
+- Set MKI_VER_MINIMAL=0.3.0, MKI_VER_OPTIMAL=0.3.2
+- fix some package lists
