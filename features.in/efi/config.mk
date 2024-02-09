@@ -8,15 +8,12 @@ EFI_LISTS := $(call tags,base efi)
 
 use/efi:
 	@$(call add_feature)
-	@$(call set,MKI_VER_MINIMAL,0.2.12)	# it's official now
-	@$(call set,MKI_VER_OPTIMAL,0.2.17)	# for EFI_BOOTARGS
 	@$(call try,EFI_BOOTLOADER,grub-efi)	# default one
 	@$(call xport,EFI_BOOTLOADER)
 	@$(call add,COMMON_LISTS,$(EFI_LISTS))
 ifeq (distro,$(IMAGE_CLASS))
 	@$(call add,INSTALL2_PACKAGES,dosfstools fatresize)
 	@$(call add,STAGE1_KCONFIG,EFI EFI_PARTITION EFIVAR_FS)
-	@$(call add,EFI_BOOTARGS,$$(STAGE2_BOOTARGS))
 ifeq (x86_64,$(ARCH))
 	@$(call add,THE_PACKAGES,$$(EFI_SHELL))
 endif
@@ -33,7 +30,7 @@ use/efi/shell: use/efi
 use/efi/signed: use/efi
 	@$(call set,EFI_CERT,altlinux)
 	@$(call add,COMMON_PACKAGES,shim-signed)
-	@$(call add,COMMON_PACKAGES,mokutil pesign)
+	@$(call add,RESCUE_PACKAGES,mokutil pesign)
 	@$(call add,RESCUE_PACKAGES,openssl)
 ifeq (,$(filter-out p10 c10f%,$(BRANCH)))
 	@$(call add,STAGE1_PACKAGES,shim-signed-installer-kludge grub-efi alt-uefi-certs dosfstools mtools)

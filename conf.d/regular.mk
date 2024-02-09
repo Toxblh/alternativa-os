@@ -6,7 +6,11 @@ distro/.regular-initrd:: use/stage2/ata use/stage2/fs use/stage2/hid \
 
 ifneq (,$(filter-out i586,$(ARCH)))
 distro/.regular-initrd:: use/stage2/net use/stage2/net-nfs use/stage2/cifs \
-	use/stage2/rtc use/stage2/drm use/stage2/sbc ; @:
+	use/stage2/rtc use/stage2/sbc ; @:
+endif
+
+ifneq (,$(filter-out i586 x86_64,$(ARCH)))
+distro/.regular-initrd:: use/stage2/drm ; @:
 endif
 
 # common ground (really lowlevel)
@@ -64,7 +68,8 @@ endif
 # DE base target
 # TODO: use/plymouth/live when luks+plymouth is done, see also #28255
 distro/.regular-desktop: distro/.regular-wm use/branding/full \
-	use/firmware/laptop +systemd +systemd-optimal +vmguest
+	use/firmware/laptop +systemd +systemd-optimal +vmguest \
+	use/live-install/oem
 	@$(call add,THE_PACKAGES,bluez)
 	@$(call add,DEFAULT_SERVICES_ENABLE,bluetoothd)
 
@@ -144,8 +149,8 @@ distro/.regular-install-x11-systemd: distro/.regular-install-x11 \
 	@$(call add,THE_PACKAGES,bluez)
 	@$(call add,DEFAULT_SERVICES_ENABLE,bluetoothd)
 
-distro/regular-icewm: distro/.regular-gtk mixin/regular-icewm \
-	use/kernel/latest
+distro/regular-icewm: distro/.regular-desktop use/x11/lightdm/gtk \
+	mixin/regular-icewm use/kernel/latest
 	@$(call add,THE_PACKAGES,icewm-startup-polkit-gnome)
 
 distro/regular-icewm-sysv: distro/.regular-gtk-sysv mixin/regular-icewm \
@@ -158,12 +163,10 @@ distro/regular-wmaker-sysv: distro/.regular-desktop-sysv \
 
 distro/regular-gnustep-sysv: distro/regular-wmaker-sysv \
 	mixin/regular-gnustep; @:
-ifeq (,$(filter-out i586 x86_64,$(ARCH)))
-	@$(call set,BOOTLOADER,isolinux)
-endif
 
-distro/regular-gnustep-systemd: distro/.regular-wm +systemd \
-	mixin/regular-wmaker mixin/regular-gnustep; @:
+distro/regular-gnustep: distro/.regular-desktop use/x11/lightdm/gtk \
+	mixin/regular-wmaker mixin/regular-gnustep
+	@$(call add,THE_PACKAGES,wmaker-autostart-polkit-gnome)
 
 distro/regular-xfce: distro/.regular-gtk mixin/regular-xfce; @:
 ifeq (,$(filter-out i586 x86_64 aarch64,$(ARCH)))
