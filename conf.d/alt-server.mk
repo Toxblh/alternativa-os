@@ -12,7 +12,7 @@ endif
 
 ifeq (,$(filter-out i586 x86_64 ppc64le aarch64 e2k%,$(ARCH)))
 distro/alt-server: server_groups_desktop = $(addprefix centaurus/,\
-        80-desktop emulators freenx-server mate office pidgin vlc xorg scanning samba)
+        80-desktop emulators freenx-server mate office pidgin xorg scanning samba)
 endif
 
 ifeq (,$(filter-out x86_64,$(ARCH)))
@@ -53,7 +53,6 @@ endif
 	@$(call add,INSTALL2_BRANDING,notes)
 	@$(call add,CLEANUP_BASE_PACKAGES,acpid-events-power)
 	@$(call add,RESCUE_BOOTARGS,nomodeset vga=0)
-	@$(call add,STAGE2_BOOTARGS,lang=ru_RU)
 ifeq (,$(filter-out e2k,$(ARCH)))
 	@$(call set,META_APP_ID,ALT Server for Elbrus-4.4)
 endif

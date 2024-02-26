@@ -9,14 +9,15 @@ use/live-install: use/live use/metadata use/repo/main \
 	@$(call add_feature)
 	@$(call add,LIVE_PACKAGES,installer-common-stage2)
 	@$(call add,BASE_PACKAGES,installer-common-stage3)
+	@$(call add,THE_LISTS,$(call tags,basesystem && !alterator))
 	@$(call add,LIVE_PACKAGES,$$(LIVE_INSTALL_PKG))
-	@$(call add,LIVE_PACKAGES,alterator-postinstall) # for auto install
+	@$(call add,THE_PACKAGES,alterator-postinstall) # for auto install
 	@$(call add,LIVE_PACKAGES,xterm) # for vnc support
 	@$(call try,INSTALLER,regular)	# might be replaced later
 	@$(call add,LIVE_PACKAGES,installer-distro-$$(INSTALLER)-stage2)
-	@$(call add,LIVE_PACKAGES,branding-$$(BRANDING)-alterator)
-	@$(call add,LIVE_PACKAGES,branding-$$(BRANDING)-release)
-	@$(call add,LIVE_PACKAGES,installer-distro-$$(INSTALLER)-stage3)
+	@$(call add,THE_PACKAGES,branding-$$(BRANDING)-alterator)
+	@$(call add,THE_PACKAGES,branding-$$(BRANDING)-release)
+	@$(call add,THE_PACKAGES,installer-distro-$$(INSTALLER)-stage3)
 	@$(call add,LIVE_PACKAGES,glibc-gconv-modules) # for guile22
 	@$(call add,LIVE_PACKAGES,curl) # for net install
 	@$(call add,LIVE_PACKAGES,lsof) # for debug alterator-vm
@@ -35,7 +36,7 @@ use/live-install/pkg: use/live-install
 # set up remote repositories within installed system out-of-box
 use/live-install/repo: use/live-install; @:
 ifneq (,$(filter-out e2k%,$(ARCH)))
-	@$(call add,BASE_PACKAGES,installer-feature-online-repo)
+	@$(call add,LIVE_PACKAGES,installer-feature-online-repo)
 endif
 
 # this one expects external vncviewer to come

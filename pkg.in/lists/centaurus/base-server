@@ -2,6 +2,8 @@
 anacron
 apt
 apt-repo
+apt-rsync
+apt-https
 glibc-gconv-modules
 glibc-locales
 glibc-nss
@@ -15,6 +17,7 @@ udev
 udev-extras
 pciutils
 su
+sudo
 
 make-initrd
 make-initrd-lvm
@@ -52,6 +55,7 @@ mdadm
 mtools
 ntfs-3g
 sfdisk
+fdisk
 usbutils
 xfsprogs
 smartmontools
@@ -67,6 +71,7 @@ sg3_utils
 
 # servers
 openssh-server
+openssh-server-control
 openssh-common
 openssh-blacklist
 postfix
@@ -117,3 +122,4 @@ glibc-timezones
 
 alt-issue-server
 color-prompt-and-man
+local-policy
