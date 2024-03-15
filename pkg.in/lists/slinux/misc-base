@@ -16,7 +16,7 @@ firmware-intel-ucode@X86
 shadow-change
 dhcpcd
 test-audio
-pa-conf-switch-on-connect
+#pa-conf-switch-on-connect
 man-pages
 etcnet-defaults-desktop
 mdadm
@@ -89,7 +89,7 @@ cups
 cups-filters
 cups-pdf
 avahi-daemon
-blueberry
+blueman
 udev-rules-rfkill-uaccess
 update-kernel
 printer-drivers-base
@@ -105,10 +105,9 @@ i586-glibc-nss@x86_64
 i586-libnss-mdns@x86_64
 i586-libnss-myhostname@x86_64
 
-pulseaudio-daemon
-pulseaudio-utils
 pavucontrol
-alsa-plugins-pulse
+
+onboard
 
 # gstreamer plugins
 gst-plugins-base1.0
@@ -127,6 +126,8 @@ cifs-utils
 #gdm-theme-simply
 #gdm2.20-help
 lightdm-gtk-greeter
+slick-greeter-
+
 #gtk3-themes-xfce4
 gnome-themes-extra-data
 

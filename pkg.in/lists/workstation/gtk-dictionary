@@ -1,4 +1,6 @@
-goldendict
-dict-mueller7-utf8
-stardict-engcom
+stardict
+stardict-mueller7
+stardict-quick_en-ru
+stardict-quick_ru-en
+#stardict-engcom
 stardict-wn

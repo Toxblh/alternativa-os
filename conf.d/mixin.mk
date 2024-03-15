@@ -48,12 +48,6 @@ else
 endif
 endif
 
-ifeq (,$(filter-out armh,$(ARCH)))
-mixin/vm-archdep::
-	@$(call set,KFLAVOURS,un-def mp)
-endif
-
-
 ifeq (,$(filter-out armh aarch64,$(ARCH)))
 mixin/vm-archdep:: use/bootloader/uboot use/no-sleep use/arm-rpi4; @:
 endif
@@ -88,6 +82,7 @@ mixin/regular-desktop: +alsa +nm-native \
 	use/fonts/otf/adobe use/fonts/otf/mozilla use/branding/notes
 	@$(call set,LOCALES,en_US ru_RU pt_BR)
 	@$(call add,THE_PACKAGES,pam-limits-desktop beesu polkit dvd+rw-tools)
+	@$(call add,THE_PACKAGES,eepm)
 	@$(call add,THE_BRANDING,alterator graphics indexhtml)
 ifneq (,$(filter-out e2k%,$(ARCH)))
 	@$(call add,THE_BRANDING,notes)
@@ -132,7 +127,6 @@ mixin/regular-gnome: use/x11/gnome use/fonts/ttf/redhat +nm-gtk4
 	@$(call add,THE_PACKAGES,chrome-gnome-shell)
 	@$(call add,THE_PACKAGES,qt5-wayland qt6-wayland)
 	@$(call add,THE_PACKAGES,cups-pk-helper cups)
-	@$(call add,THE_PACKAGES,eepm)
 	@$(call add,THE_PACKAGES,fonts-ttf-lxgw-wenkai)
 
 mixin/regular-kde5: use/x11/kde5 use/browser/falkon \
@@ -141,6 +135,8 @@ mixin/regular-kde5: use/x11/kde5 use/browser/falkon \
 	@$(call add,THE_PACKAGES,plasma5-xdg-desktop-portal-kde)
 	@$(call add,THE_PACKAGES,qt6-wayland)
 	@$(call add,THE_PACKAGES,plasma5-discover)
+	@$(call add,THE_PACKAGES,accountsservice)
+	@$(call add,THE_PACKAGES,gtk-theme-breeze)
 ifneq (,$(filter-out e2k% riscv64 loongarch64,$(ARCH)))
 	@$(call add,THE_PACKAGES,falkon-kde5)
 endif

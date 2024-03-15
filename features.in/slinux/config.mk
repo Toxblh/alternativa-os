@@ -70,7 +70,7 @@ endif
 
 use/slinux/mixin-base: use/slinux \
 	+x11 use/x11/3d \
-	use/x11/lightdm/gtk +pulse \
+	use/x11/lightdm/gtk +pipewire \
 	+nm use/x11/gtk/nm +systemd +systemd-optimal +wireless \
 	use/l10n/default/ru_RU \
 	use/ntp/chrony \
@@ -86,19 +86,12 @@ use/slinux/mixin-base: use/slinux \
 	@$(call add,THE_LISTS,$(call tags,base l10n))
 	@$(call add,THE_KMODULES,staging)
 	@$(call add,THE_LISTS,slinux/browser)
-ifeq (,$(filter-out armh mipsel,$(ARCH)))
-	@$(call add,THE_LISTS,slinux/multimedia-player-celluloid)
-else
 	@$(call add,THE_LISTS,slinux/multimedia-player-vlc)
-endif
 ifeq (,$(filter-out e2k%,$(ARCH)))
 	@$(call add,THE_LISTS,$(call tags,xscreensaver && (base || desktop)))
 endif
-ifeq (,$(filter-out armh aarch64 i586 x86_64,$(ARCH)))
+ifeq (,$(filter-out aarch64 i586 x86_64,$(ARCH)))
 	@$(call set,KFLAVOURS,std-def)
-endif
-ifeq (,$(filter-out aarch64,$(ARCH)))
-	@$(call set,KFLAVOURS,rpi-un std-def)
 endif
 
 use/slinux/live: use/live/x11 use/live/rw \
@@ -116,12 +109,9 @@ use/slinux/base: use/isohybrid use/luks \
 	use/stage2/ata use/stage2/fs use/stage2/hid use/stage2/md \
 	use/stage2/mmc use/stage2/net use/stage2/net-nfs use/stage2/cifs \
 	use/stage2/rtc use/stage2/sbc use/stage2/scsi use/stage2/usb \
-	use/install2/fonts \
-	use/install2/fat \
-	use/efi/memtest86 use/efi/shell \
+	use/efi/shell \
 	use/bootloader/grub \
 	use/branding/complete \
-	mixin/desktop-installer \
 	use/firmware/laptop \
 	use/vmguest/kvm/x11 use/stage2/kms/nvidia \
 	use/e2k/multiseat/full use/e2k/x11/101 use/e2k/sound/401 \
@@ -129,11 +119,9 @@ use/slinux/base: use/isohybrid use/luks \
 ifeq (,$(filter-out i586 x86_64,$(ARCH)))
 	@$(call set,BOOTLOADER,grubpcboot)
 endif
-	@$(call add,INSTALL2_PACKAGES,xorg-conf-libinput-touchpad)
 	@$(call add,STAGE2_PACKAGES,btrfs-progs)
 
-use/slinux/full: use/slinux/base \
-	use/install2/repo
+use/slinux/full: use/slinux/base
 ifeq (,$(filter-out x86_64,$(ARCH)))
 	@$(call set,KFLAVOURS,un-def std-def)
 endif

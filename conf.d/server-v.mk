@@ -26,7 +26,7 @@ distro/server-v: nfs = $(addprefix server-v/,\
 	nfs nfs-ganesha)
 
 distro/server-v: opennebula = $(addprefix server-v/opennebula/,\
-	flow gate gui node-kvm node-lxd server)
+	flow gate gui node-kvm node-lxc server)
 
 distro/server-v: openstack = $(addprefix server-v/openstack/,\
 	block compute controller network)
@@ -49,7 +49,7 @@ distro/server-v: logging = $(addprefix server-v/,\
 	rsyslog-classic systemd-journal-remote)
 
 distro/server-v: profiles = $(addprefix server-v/,\
-	111-opennebula-server 112-opennebula-node 113-opennebula-lxd 140-basic 201-docker)
+	111-opennebula-server 112-opennebula-node 113-opennebula-lxc 140-basic 201-docker)
 #121-openstack-node 122-openstack-controller 
 
 ifeq (,$(filter-out x86_64 aarch64,$(ARCH)))
@@ -72,6 +72,7 @@ distro/.server-v-base: distro/.base distro/.installer \
 	use/net/etcnet use/net-ssh \
 	use/stage2/ata use/stage2/fs use/stage2/hid use/stage2/md \
 	use/stage2/mmc use/stage2/net use/stage2/net-nfs use/stage2/cifs \
+	use/volumes/alt-server-v \
 	use/stage2/rtc use/stage2/scsi use/stage2/usb \
 	use/stage2/kms \
 	use/server/virt use/docs/license use/docs/manual
@@ -104,11 +105,11 @@ distro/server-v: distro/.server-v-base +installer \
 	use/vmguest
 	@$(call add,RESCUE_BOOTARGS,nomodeset vga=0)
 	@$(call add,STAGE2_BOOTARGS,mpath)
-	@$(call set,IMAGE_FLAVOUR,$(subst alt-10.1-,,$(IMAGE_NAME)))
-	@$(call set,META_VOL_ID,ALT Server-V 10.1.0 $(ARCH))
+	@$(call set,IMAGE_FLAVOUR,$(subst alt-10.2-,,$(IMAGE_NAME)))
+	@$(call set,META_VOL_ID,ALT Server-V 10.2.0 $(ARCH))
 	@$(call set,META_PUBLISHER,BaseALT Ltd)
 	@$(call set,META_VOL_SET,ALT)
-	@$(call set,META_APP_ID,ALT Server-V 10.1.0 $(ARCH) $(shell date +%F))
+	@$(call set,META_APP_ID,ALT Server-V 10.2.0 $(ARCH) $(shell date +%F))
 	@$(call set,DOCS,alt-server-v)
 	@$(call add,BASE_LISTS,virt/base.pkgs)
 	@$(call add,MAIN_LISTS,virt/extra.pkgs)
@@ -143,6 +144,9 @@ endif
 		pve-firewall pvefw-logger pve-guests pve-ha-crm pve-ha-lrm spiceproxy \
 		lxc lxcfs lxc-net lxc-monitord qmeventd pvescheduler pve-lxc-syscalld)
 	@$(call add,SERVICES_ENABLE,multipathd)
+# Instead of installer-feature-sudo-enable-by-default:
+#	@$(call add,CONTROL,sudoers:relaxed)
+#	@$(call add,CONTROL,sudowheel:enabled)
 
 #	@$(call add,MAIN_GROUPS,server-v/141-cockpit $(cockpit))
 #	@$(call add,MAIN_GROUPS,server-v/430-moosefs $(moosefs))

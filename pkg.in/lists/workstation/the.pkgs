@@ -2,6 +2,7 @@ alterator-notes
 userpasswd
 pam-limits-desktop
 beesu
+gostsum
 audit
 xmessage
 lsof
@@ -9,7 +10,11 @@ lftp
 catdoc
 etcnet-defaults-desktop
 lsb-release
+libnss-role
+alterator-roles-common
 man-pages
+man-pages-ru
+man-pages-ru-extra
 mdadm
 make-initrd-mdadm
 alterator-quota
@@ -21,6 +26,13 @@ alterator-net-iptables
 alterator-update-kernel
 alterator-zram-swap
 alterator-limits
+
+# Ensure that right gnupg2 will be pulled
+gnupg2
+libksba
+gnupg2-gostcrypto-
+libksba-gost-
+libgcrypt-gost20-
 
 grub-customizer@X86
 
@@ -44,6 +56,8 @@ apt-indicator
 recoll-extras
 
 onboard
+
+timeshift
 
 # compat libs
 libusb-compat@IA32
@@ -76,7 +90,6 @@ ca-certificates-digital.gov.ru
 disable-usb-autosuspend@X86
 
 bluez
-gnome-bluetooth
 
 gpm
 fdisk

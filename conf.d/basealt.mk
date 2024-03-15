@@ -18,7 +18,7 @@ distro/alt-workstation: distro/.base +vmguest +wireless +efi \
 	mixin/desktop-installer mixin/alt-workstation \
 	mixin/alt-workstation-install \
 	use/memtest use/rescue use/bootloader/grub use/luks \
-	use/efi/memtest86 use/efi/shell \
+	use/efi/shell \
 	use/install2/repo use/install2/suspend use/live/suspend \
 	use/live/install use/live/x11 use/live/repo use/live/rw \
 	use/vmguest/kvm/x11 use/stage2/kms \
@@ -46,8 +46,6 @@ ifeq (,$(filter-out e2k%,$(ARCH)))
 	@$(call add,THE_PACKAGES,xorg-drv-smi)	# use/x11/smi
 	@$(call add,THE_PACKAGES,flashrom)
 	@$(call add,MAIN_PACKAGES,alterator-secsetup)
-	@$(call add,MAIN_GROUPS,workstation/alterator-web)
-	@$(call add,SERVICES_ENABLE,ahttpd)	# in case it gets installed
 ifeq (,$(filter-out e2k,$(ARCH)))
 	@$(call set,META_VOL_ID,ALT Workstation for Elbrus 401-PC)
 endif	# e2k
@@ -93,11 +91,6 @@ ifeq (,$(filter-out aarch64 armh,$(ARCH)))
 vm/alt-workstation-rpi: vm/.alt-workstation use/arm-rpi4/full
 	@$(call add,THE_LISTS,workstation/celluloid)
 	@$(call set,THE_BROWSER,chromium)
-endif
-
-ifeq (,$(filter-out armh,$(ARCH)))
-vm/alt-workstation-mcom02: vm/.alt-workstation use/armh-mcom02/x11
-	@$(call add,THE_LISTS,workstation/celluloid)
 endif
 
 ifeq (,$(filter-out mipsel,$(ARCH)))

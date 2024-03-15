@@ -1,10 +1,10 @@
 # shared across all supported arches, can be complemented per arch
 
 mixin/alt-workstation-install: workstation_groups = $(addprefix workstation/,\
-	10-office 20-networking 30-multimedia 40-virtualization \
-	raccess agents emulators ganttproject gnome-peer-to-peer graphics-editing \
+	10-office 20-networking 30-multimedia 35-gpolicy 40-virtualization \
+	raccess agents alterator-web emulators ganttproject gnome-peer-to-peer graphics-editing \
 	libreoffice mate-usershare pidgin scanning scribus \
-	sound-editing thunderbird freeipa-client gpolicy)
+	sound-editing thunderbird freeipa-client gpolicy-adm gpolicy-client gpolicy-templates)
 
 mixin/alt-workstation: +systemd +systemd-optimal +pulse +nm \
 	use/kernel/net use/l10n/default/ru_RU \
@@ -20,18 +20,12 @@ mixin/alt-workstation: +systemd +systemd-optimal +pulse +nm \
 	use/docs/manual use/docs/indexhtml \
 	use/browser/firefox use/browser/firefox/esr \
 	use/cleanup/live-no-cleanupdb
-ifeq (,$(filter-out x86_64,$(ARCH)))
-	@$(call set,KFLAVOURS,un-def std-def)
+ifeq (,$(filter-out x86_64 aarch64,$(ARCH)))
+	@$(call set,KFLAVOURS,std-def un-def)
 	@$(call add,MAIN_PACKAGES,kernel-headers-modules-un-def)
 	@$(call add,MAIN_PACKAGES,kernel-headers-un-def)
 else
-ifeq (,$(filter-out aarch64,$(ARCH)))
-	@$(call set,KFLAVOURS,rpi-un std-def)
-	@$(call add,MAIN_PACKAGES,kernel-headers-modules-rpi-un)
-	@$(call add,MAIN_PACKAGES,kernel-headers-rpi-un)
-else
 	@$(call set,KFLAVOURS,std-def)
-endif
 endif
 	@$(call add,MAIN_PACKAGES,kernel-headers-modules-std-def)
 	@$(call add,MAIN_PACKAGES,kernel-headers-std-def)
@@ -61,9 +55,11 @@ endif
 	@$(call add,SERVICES_ENABLE,cups cups-browsed smb nmb httpd2 bluetoothd libvirtd)
 	@$(call add,SERVICES_ENABLE,crond)
 	@$(call add,SERVICES_ENABLE,fstrim.timer)
+	@$(call add,SERVICES_ENABLE,ahttpd)	# in case it gets installed
 	@$(call add,SERVICES_DISABLE,powertop bridge gpm)
 	@$(call add,SYSTEMD_SERVICES_DISABLE,systemd-userdbd.service)
 	@$(call add,SYSTEMD_SERVICES_DISABLE,systemd-userdbd.socket)
+	@$(call add,CONTROL,libnss-role:enabled)
 	@$(call set,META_PUBLISHER,BaseALT Ltd)
 	@$(call set,META_VOL_SET,ALT)
 	@$(call set,META_VOL_ID,ALT Workstation $(DISTRO_VERSION) $(ARCH))
@@ -73,6 +69,7 @@ endif
 
 mixin/alt-workstation-install: +installer \
 	use/install2/fat use/install2/vnc \
+	use/install2/oem \
 	use/stage2/ata use/stage2/fs use/stage2/hid use/stage2/md \
 	use/stage2/mmc use/stage2/net use/stage2/net-nfs use/stage2/cifs \
 	use/stage2/rtc use/stage2/sbc use/stage2/scsi use/stage2/usb
