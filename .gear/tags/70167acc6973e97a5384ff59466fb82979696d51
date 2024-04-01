@@ -1,0 +1,17 @@
+object 53b0934a606af16d252fec0f2c32a9225874fba4
+type commit
+tag v1.6.3
+tagger Anton Midyukov <antohami@altlinux.org> 1711988343 +0700
+
+v1.6.3
+
+- grub: do not abort, if grub theme not found
+- add alt-platform-builder
+- education: add latests commits from cas@
+- education: use live as installer and rescue
+- datetime: preset utc and timezone for live also
+- doc/params.txt: add PACK_SQUASHFS_PROCESSORS
+- e2k fixes for alt-worksttation, alt-server, alt-education
+  from mike@
+- expand @KFLAVOUR in package lists
+- services: fix enable/disable bluetooth (fix typo)
