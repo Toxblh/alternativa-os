@@ -22,11 +22,11 @@ ifeq (,$(filter-out e2k%,$(ARCH)))
 	@$(call add,THE_PACKAGES,jre)
 else
 	@$(call add,THE_PACKAGES,java-11-openjdk)
+	@$(call add,THE_PACKAGES,installer-feature-quota-stage2)
 endif
 	@$(call add,THE_PACKAGES,mousepad)
 	@$(call add,THE_PACKAGES,thunderbird)
 	@$(call add,THE_PACKAGES,installer-feature-lightdm-stage3)                            
-	@$(call add,THE_PACKAGES,installer-feature-quota-stage2)
 	@$(call add,THE_LISTS,$(call tags,base l10n))
 	@$(call add,BASE_LISTS,workstation/3rdparty)
 	@$(call add,THE_LISTS,$(call tags,base regular))
@@ -57,7 +57,7 @@ ifeq (distro,$(IMAGE_CLASS))
 mixin/education-live: \
 	use/live/suspend \
 	use/live/repo use/live/x11 use/live/rw \
-	use/rescue/base use/memtest \
+	use/memtest \
 	use/cleanup/live-no-cleanupdb
 	@$(call add,LIVE_PACKAGES,livecd-timezone)
 	@$(call add,LIVE_PACKAGES,mc-full)
@@ -71,7 +71,6 @@ endif
 	@$(call add,LIVE_PACKAGES,xorg-conf-libinput-touchpad)
 	@$(call add,LIVE_PACKAGES,btrfs-progs)
 	@$(call add,LIVE_PACKAGES,xfsprogs xfsinfo xfsdump)
-	@$(call add,LIVE_LISTS,$(call tags,base rescue))
 	@$(call add,LIVE_LISTS,$(call tags,base extra))
 	@$(call add,CONTROL,tcb_chkpwd:tcb)
 
@@ -94,7 +93,6 @@ mixin/education-base: \
 	use/l10n/default/ru_RU +vmguest \
 	+efi use/efi/shell \
 	use/isohybrid use/luks \
-	use/install2/fonts \
 	use/wireless \
 	+plymouth \
 	use/stage2/ata use/stage2/fs use/stage2/hid use/stage2/md \
@@ -116,7 +114,6 @@ mixin/education-lite-base: \
 	use/l10n/default/ru_RU +vmguest \
 	+efi use/efi/shell \
 	use/isohybrid use/luks \
-	use/install2/fonts \
 	use/wireless \
 	+plymouth \
 	use/stage2/ata use/stage2/fs use/stage2/hid use/stage2/md \
@@ -131,16 +128,11 @@ mixin/education-lite-base: \
 	@$(call add,STAGE2_PACKAGES,chrony)
 
 mixin/education-installer: \
-	+installer \
-	use/install2/repo \
-	use/rescue/base use/memtest \
+	+live-installer-pkg \
+	use/memtest \
 	use/branding/complete \
-	use/install2/vnc use/install2/full \
-	use/install2/fat \
 	mixin/education-base \
 	use/docs/manual use/docs/indexhtml
-	@$(call add,INSTALL2_PACKAGES,disable-usb-autosuspend)
-	@$(call add,INSTALL2_PACKAGES,btrfs-progs)
 	@$(call add,MAIN_GROUPS,education/00_base)
 	@$(call add,MAIN_GROUPS,education/00_libreoffice)
 	@$(call add,MAIN_GROUPS,education/01_preschool)
@@ -172,12 +164,16 @@ distro/alt-education-lite-live: distro/.base mixin/education-lite-live \
 	mixin/education-lite-base mixin/education-lite use/branding/full; @:
 
 distro/education: distro/alt-education; @:
-distro/alt-education: distro/.installer \
+distro/alt-education:: distro/.base \
 	mixin/education \
 	mixin/education-installer \
+	mixin/education-live \
+	use/live/rescue \
+	use/live-install/oem \
 	use/e2k/multiseat/full use/power/acpi \
 	use/control
 	@$(call set,INSTALLER,education)
+	@$(call add,MAIN_LISTS,kernel-headers)
 ifeq (,$(filter-out e2k%,$(ARCH)))
 	@$(call add,MAIN_GROUPS,education/06_kdesc)
 	@$(call add,MAIN_PACKAGES,xorg-conf-noblank)
@@ -187,16 +183,9 @@ ifeq (,$(filter-out e2k%,$(ARCH)))
 	@$(call add,CONTROL,pam_mktemp:disabled)	### private /tmp dirs
 else
 	@$(call add,MAIN_GROUPS,education/06_kde5)
-ifeq (,$(filter-out x86_64 aarch64,$(ARCH)))
-	@$(call add,MAIN_GROUPS,education/09_video-conferencing)
-endif
 endif	# e2k%
 ifeq (,$(filter-out i586 x86_64 aarch64,$(ARCH)))
 	@$(call set,KFLAVOURS,std-def un-def)
-	@$(call add,MAIN_PACKAGES,kernel-headers-std-def)
-	@$(call add,MAIN_PACKAGES,kernel-headers-modules-std-def)
-	@$(call add,MAIN_PACKAGES,kernel-headers-std-def)
-	@$(call add,MAIN_PACKAGES,kernel-headers-modules-std-def)
 	@$(call add,THE_KMODULES,virtualbox)
 	@$(call add,THE_KMODULES,lsadrv bbswitch)
 	@$(call add,THE_KMODULES,staging)
@@ -210,6 +199,10 @@ ifeq (,$(filter-out i586 x86_64,$(ARCH)))
 endif
 	@$(call add,CONTROL,sudo:public)
 	@$(call add,CONTROL,fusermount:wheelonly)
+
+ifeq (,$(filter-out e2k%,$(ARCH)))
+distro/alt-education:: +power; @:
+endif
 
 endif # distro
 

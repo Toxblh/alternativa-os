@@ -1,0 +1,13 @@
+# Utilities for build packages and distribution
+rpm-build
+hasher
+gear
+
+github2spec
+gear-remotes-utils
+gear-uupdate
+
+mkimage-profiles
+
+# Useful programs
+color-prompt-and-man

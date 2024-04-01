@@ -1,5 +1,7 @@
 # core
 phosh
+phosh-tour
+phosh-gsk-renderer-gl
 xdg-desktop-portal-gtk
 xdg-desktop-portal-wlr
 xorg-xwayland
@@ -21,9 +23,6 @@ phosh-antispam
 # file manager
 portfolio
 tracker3
-
-# screen recording for wlroots-based compositors
-wf-recorder
 
 # base libraries
 at-spi2-core
