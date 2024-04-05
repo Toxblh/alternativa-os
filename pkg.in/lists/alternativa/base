@@ -1,0 +1,147 @@
+# Flatpak
+flatpak
+flatpak-repo-flathub
+
+# initial setup
+gnome-initial-setup
+
+# Canberra modules for both GTK+
+libcanberra-gtk2
+libcanberra-gtk3
+
+# Password keeper
+gnome-keyring
+gnome-keyring-ssh
+
+# Encryption keys management
+seahorse
+pinentry-gnome3
+
+# All gvfs-backends
+gvfs-backends
+fuse-gvfs
+
+# see ALT 
+#31129
+xdg-utils
+gnome-disk-utility
+
+# Display manager
+gdm-gnome
+
+# Web browsers
+epiphany
+yandex-browser-stable
+
+# Default messenger
+geary
+
+# and contacts manager
+gnome-contacts
+
+# Default document reader (currently pdf, ps, tiff, dvi)
+evince
+
+# and E-Book Reader
+foliate
+
+# and videos from a webcam
+cheese
+
+# Note editor
+bijiben
+
+# Utilities
+gnome-utils
+
+# Let's have nice notifications
+notification-daemon
+
+
+# Applications
+
+# Plugins for gedit
+gedit-plugins
+
+# Stock multimedia applications
+gnome-sound-recorder
+
+# Default music player
+gnome-music
+
+# Extneded music player
+rhythmbox
+
+# All Rhythmbox plugins
+rhythmbox-plugins
+
+# Default media player
+totem
+
+# and plugins
+totem-plugins
+
+# Default photo viewer
+gnome-photos
+
+# Default image viewer
+eog
+eog-plugins
+
+# A quick previewer for Nautilus
+sushi
+
+# mypaint, krita thumbnailer for Nautilus
+gnome-kra-ora-thumbnailer
+
+# Epub thumbnailer for Nautilus
+gnome-epub-thumbnailer
+
+# Nautilus extension for terminal
+gnome-terminal-nautilus
+
+# Weather application
+gnome-weather
+
+# Clock application
+gnome-clocks
+
+# Maps application
+gnome-maps
+
+# power consumption statistic
+gnome-power-manager
+
+NetworkManager-gnome
+
+# Bluetooth pairing and control program
+gnome-bluetooth3.0
+gnome-remote-desktop
+gnome-nettool
+rygel
+rygel-tracker
+gnome-usage
+gnome-software
+
+# flatpak
+xdg-desktop-portal-gnome
+
+# spell checking dictionary
+hunspell-ru
+
+# menuedit
+alacarte
+
+# a11y
+orca
+accerciser
+
+# extenstions 
+gnome-shell-extension-appindicator
+gnome-shell-extension-dash-to-dock
+
+# base apps
+neofetch
+git
+eepm
+

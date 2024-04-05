@@ -1,0 +1,12 @@
+alt-csp-cryptopro
+# ?
+rosa-crypto-tool
+
+# CryptoPRO из KWork
+cryptopro-preinstall-full@X86
+cryptopro-preinstall@X86
+gnupg-pkcs11-scd
+libpkcs11-helper
+gnupg2
+
+
