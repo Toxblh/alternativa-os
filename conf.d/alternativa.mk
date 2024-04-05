@@ -30,7 +30,7 @@ distro/alternativa-os: distro/.regular-install-x11-systemd \
 # Пакет софта - pkg.in/lists/alternativa/nvidia
 distro/alternativa-os-nvidia: distro/alternativa-os \
 	use/x11/nvidia \
-	use/stage2/kms/nvidia \
+	use/stage2/kms/nvidia
 	@$(call add,EFI_BOOTARGS,xdriver=vesa)
 	@$(call add,BASE_BOOTARGS,nvidia-drm.modeset=1)
 	@$(call add,LIVE_PACKAGES,installer-feature-remove-xorgconf)
